@@ -1,132 +1,151 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const HeroSlider = () => {
   const slides = [
     {
       id: 1,
-      title: "Slide 1",
-      subtitle: "This is the first slide",
+      title: "Discover Premium Collections",
+      subtitle: "Exclusive products curated just for you",
       image:
         "https://static.thcdn.com/images/xlarge/webp/widgets/95-fr/36/original-Page-004-084536.jpg",
     },
     {
       id: 2,
-      title: "Slide 2",
-      subtitle: "This is the second slide",
+      title: "New Arrivals",
+      subtitle: "Explore our latest additions",
       image:
         "https://static.thcdn.com/images/xlarge/webp/widgets/95-en/52/original-0109_660205_LF_JN_Sol_Batching_1920x600-152352.jpg",
     },
     {
       id: 3,
-      title: "Slide 3",
-      subtitle: "This is the third slide",
+      title: "Limited Edition",
+      subtitle: "Exclusive items available for a limited time",
       image:
         "https://static.thcdn.com/images/xlarge/webp/widgets/95-fr/05/original-0102_650070_LF_AMR_ESPA_BOTM_Shot2_FR_1920x600-092405.jpg",
     },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  // Automatically change slides every 5 seconds
+  // Automatically change slides every 6 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 5000);
+      goToNextSlide();
+    }, 6000);
 
-    return () => clearInterval(interval); // Cleanup the interval on unmount
-  }, [slides.length]);
+    return () => clearInterval(interval);
+  }, [currentIndex]);
+
+  const goToNextSlide = useCallback(() => {
+    if (!isAnimating) {
+      setIsAnimating(true);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
+      setTimeout(() => setIsAnimating(false), 700);
+    }
+  }, [isAnimating, slides.length]);
+
+  const goToPrevSlide = useCallback(() => {
+    if (!isAnimating) {
+      setIsAnimating(true);
+      setCurrentIndex((prevIndex) =>
+        prevIndex === 0 ? slides.length - 1 : prevIndex - 1
+      );
+      setTimeout(() => setIsAnimating(false), 700);
+    }
+  }, [isAnimating, slides.length]);
 
   const goToSlide = (index) => {
-    setCurrentIndex(index);
+    if (!isAnimating && index !== currentIndex) {
+      setIsAnimating(true);
+      setCurrentIndex(index);
+      setTimeout(() => setIsAnimating(false), 700);
+    }
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full h-screen max-h-[600px] overflow-hidden">
       {/* Slides */}
-      <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
+      <div className="absolute inset-0">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-              index === currentIndex ? "opacity-100" : "opacity-0"
+            className={`absolute inset-0 transition-all duration-700 ease-in-out ${
+              index === currentIndex
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-105"
             }`}
           >
+            <div className="absolute inset-0 bg-black/30 z-10" />
             <img
               src={slide.image}
               alt={slide.title}
-              className="absolute block w-full h-full object-cover"
+              className="absolute w-full h-full object-cover"
             />
-            <div className="absolute bottom-8 left-8 text-white bg-black bg-opacity-50 p-4 rounded">
-              <h2 className="text-2xl font-bold">{slide.title}</h2>
-              <p className="mt-2">{slide.subtitle}</p>
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="text-center max-w-4xl px-6">
+                <h2 className="text-4xl md:text-6xl font-bold text-white mb-4 transform transition-all duration-700 ease-out"
+                    style={{
+                      opacity: index === currentIndex ? 1 : 0,
+                      transform: index === currentIndex ? 'translateY(0)' : 'translateY(20px)',
+                      transitionDelay: '300ms'
+                    }}>
+                  {slide.title}
+                </h2>
+                <p className="text-xl md:text-2xl text-white mb-8 transform transition-all duration-700 ease-out"
+                   style={{
+                     opacity: index === currentIndex ? 1 : 0,
+                     transform: index === currentIndex ? 'translateY(0)' : 'translateY(20px)',
+                     transitionDelay: '400ms'
+                   }}>
+                  {slide.subtitle}
+                </p>
+                <button className="bg-white text-gray-900 hover:bg-gray-100 px-8 py-3 rounded-full font-medium text-lg transform transition-all duration-700 ease-out"
+                        style={{
+                          opacity: index === currentIndex ? 1 : 0,
+                          transform: index === currentIndex ? 'translateY(0)' : 'translateY(20px)',
+                          transitionDelay: '500ms'
+                        }}>
+                  Shop Now
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
+      {/* Navigation Buttons */}
+      <button
+        className="absolute top-1/2 left-4 z-30 -translate-y-1/2 bg-white/10 backdrop-blur-sm hover:bg-white/30 text-white rounded-full p-3 transition duration-300"
+        onClick={goToPrevSlide}
+        aria-label="Previous slide"
+      >
+        <ArrowLeft className="w-6 h-6" />
+      </button>
+      <button
+        className="absolute top-1/2 right-4 z-30 -translate-y-1/2 bg-white/10 backdrop-blur-sm hover:bg-white/30 text-white rounded-full p-3 transition duration-300"
+        onClick={goToNextSlide}
+        aria-label="Next slide"
+      >
+        <ArrowRight className="w-6 h-6" />
+      </button>
+
       {/* Indicators */}
-      <div className="absolute z-30 flex -translate-x-1/2 space-x-3 bottom-5 left-1/2">
+      <div className="absolute z-30 flex -translate-x-1/2 space-x-4 bottom-8 left-1/2">
         {slides.map((_, index) => (
           <button
             key={index}
-            className={`w-3 h-3 rounded-full ${
-              currentIndex === index ? "bg-white" : "bg-gray-400"
+            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              currentIndex === index
+                ? "bg-white w-8"
+                : "bg-white/50 hover:bg-white/80"
             }`}
-            aria-label={`Slide ${index + 1}`}
+            aria-label={`Go to slide ${index + 1}`}
             onClick={() => goToSlide(index)}
-          ></button>
+          />
         ))}
       </div>
-
-      {/* Navigation Buttons */}
-      <button
-        className="absolute top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-        onClick={() =>
-          setCurrentIndex(
-            currentIndex === 0 ? slides.length - 1 : currentIndex - 1
-          )
-        }
-      >
-        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white">
-          <svg
-            className="w-4 h-4 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 6 10"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M5 1 1 5l4 4"
-            />
-          </svg>
-        </span>
-      </button>
-      <button
-        className="absolute top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none"
-        onClick={() =>
-          setCurrentIndex((currentIndex + 1) % slides.length)
-        }
-      >
-        <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white">
-          <svg
-            className="w-4 h-4 text-white"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 6 10"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M1 9l4-4-4-4"
-            />
-          </svg>
-        </span>
-      </button>
     </div>
   );
 };

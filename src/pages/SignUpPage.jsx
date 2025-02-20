@@ -3,14 +3,12 @@ import Header from "../components/Header";
 import SignUp from "../components/SignUp";
 import Footer from "../components/Footer";
 
-const HomePage = () => {
+const SignUpPage = () => {
   return (
     <div>
-      <Header />
       < SignUp/>
-      <Footer />
     </div>
   );
 };
 
-export default HomePage;
+export default SignUpPage;

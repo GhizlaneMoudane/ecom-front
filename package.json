@@ -8,12 +8,20 @@
     "build": "vite build && echo '/* /index.html  200' > dist/_redirects",
     "lint": "eslint .",
     "preview": "vite preview",
-    "tw": "node_modules/tailwindcss/dist/cli.js"
+    "tw": "node_modules/tailwindcss/dist/cli.js",
+    "start": "HTTPS=true react-scripts start"
   },
   "dependencies": {
+    "@ant-design/plots": "^2.3.3",
+    "@headlessui/react": "^2.2.0",
     "@material-tailwind/react": "^2.1.10",
+    "@stripe/react-stripe-js": "^3.1.1",
+    "@stripe/stripe-js": "^5.6.0",
+    "antd": "^5.24.1",
     "axios": "^1.7.9",
     "flowbite": "^3.0.0",
+    "headlessui": "^0.0.0",
+    "lucide-react": "^0.474.0",
     "postcss-cli": "^11.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -22,6 +30,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "@heroicons/react": "^2.2.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",

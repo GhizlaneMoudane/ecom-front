@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import LogingImg from '../assets/Log.png';
+import authService from '../services/authService';
+
 const Login = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -9,7 +10,15 @@ const Login = () => {
     rememberMe: false,
   });
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (authService.isAuthenticated()) {
+      navigate("/"); // Redirect to dashboard if already authenticated
+    }
+  }, [navigate]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -21,20 +30,24 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+    
     try {
-      const response = await axios.get("https://your-backend-endpoint/user", {
-        params: { email: formData.username, password: formData.password },
-      });
-
-      if (response.data.authenticated) {
-        alert("Login successful!");
-        localStorage.setItem("user", JSON.stringify(response.data));
-        navigate("/"); // Redirect to the home page
+      const result = await authService.login(formData.username, formData.password);
+      
+      if (result.success) {
+        // Success notification or toast could be added here
+        navigate("/"); // Redirect to dashboard
       } else {
-        setError(response.data.message);
+        // Display error message from backend
+        setError(result.message);
       }
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      setError("An unexpected error occurred. Please try again.");
+      console.error("Login error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,6 +64,13 @@ const Login = () => {
                 Your journey begins here.
               </p>
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span className="block sm:inline">{error}</span>
+              </div>
+            )}
 
             {/* Username Field */}
             <div>
@@ -140,9 +160,12 @@ const Login = () => {
             <div className="mt-8">
               <button
                 type="submit"
-                className="w-full shadow-xl py-2.5 px-4 text-sm tracking-wide rounded-lg text-white bg-[#ffb190] hover:bg-[#ffc3a0] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffc3a0]"
+                disabled={loading}
+                className={`w-full shadow-xl py-2.5 px-4 text-sm tracking-wide rounded-lg text-white 
+                  ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#ffb190] hover:bg-[#ffc3a0]'} 
+                  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ffc3a0]`}
               >
-                Sign in
+                {loading ? 'Signing in...' : 'Sign in'}
               </button>
             </div>
 

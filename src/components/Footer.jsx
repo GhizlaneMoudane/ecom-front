@@ -31,12 +31,12 @@ const Footer = () => {
                         </svg>
                 </a>
                 <p class="py-8 text-sm text-gray-500 lg:max-w-xs text-center lg:text-left">Trusted in more than 100 countries & 5 million customers. Have any query ?</p>
-                <a href="javascript:;"  class="py-2.5 px-5 h-9 block w-fit bg-indigo-600 rounded-full shadow-sm text-xs text-white mx-auto transition-all  duration-500 hover:bg-indigo-700 lg:mx-0">
+                <a href="javascript:;"  class="py-2.5 px-5 h-9 block w-fit bg-[#ffb190] rounded-full shadow-sm text-xs text-white mx-auto transition-all  duration-500 hover:bg-indigo-700 lg:mx-0">
                     Contact us
                 </a>
             </div>
             <div class="lg:mx-auto text-left ">
-                <h4 class="text-lg text-gray-900 font-medium mb-7">Pagedone</h4>
+                <h4 class="text-lg text-gray-900 font-medium mb-7">A-Market</h4>
                 <ul class="text-sm  transition-all duration-500">
                     <li class="mb-6"><a href="javascript:;"  class="text-gray-600 hover:text-gray-900">Home</a></li>
                     <li class="mb-6"><a href="javascript:;"  class=" text-gray-600 hover:text-gray-900">About</a></li>
@@ -74,7 +74,7 @@ const Footer = () => {
         </div>
         <div class="py-7 border-t border-gray-200">
             <div class="flex items-center justify-center flex-col lg:justify-between lg:flex-row">
-                <span class="text-sm text-gray-500 ">©<a href="https://pagedone.io/">pagedone</a> 2024, All rights reserved.</span>
+                <span class="text-sm text-gray-500 ">©<a href="https://pagedone.io/">A-Market</a> 2024, All rights reserved.</span>
                 <div class="flex mt-4 space-x-4 sm:justify-center lg:mt-0 ">
                     <a href="javascript:;"  class="w-9 h-9 rounded-full bg-gray-700 flex justify-center items-center hover:bg-indigo-600">
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
