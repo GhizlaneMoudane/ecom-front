@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Base URL for API
-const API_URL = "/api";
+const API_URL = "https://t334bo4yzlt7mfprswe7muzaa40texwy.lambda-url.eu-west-1.on.aws/";
 const API_KEY = "hello123@"; // This should be stored in environment variables
 
 // Login/Authenticate user
